@@ -1,0 +1,30 @@
+PENDIENTE DE GENERAR EN TU MÁQUINA
+==================================
+
+Este archivo debe contener la salida completa de `pgtbltest` ejecutado en
+QEMU con la versión entregada, junto con fecha, commit y resultado.
+
+No se pudo generar automáticamente aquí porque el entorno de desarrollo no
+dispone del toolchain de RISC-V (riscv64-*-gcc) ni de QEMU.
+
+Para generarlo (en WSL/Ubuntu con el toolchain, igual que en el Proyecto 2):
+
+  1. Clonar xv6 y situarse en el commit del proyecto:
+       git clone https://github.com/mit-pdos/xv6-riscv.git
+       cd xv6-riscv
+       git switch -c proyecto3 06aad25
+
+  2. Copiar los archivos de kernel/ y user/ de esta entrega sobre xv6, y usar
+     el pgtbltest.c OFICIAL del docente (sobrescribe el de apoyo).
+
+  3. Agregar $U/_pgtbltest a UPROGS en el Makefile.
+
+  4. Compilar y ejecutar, capturando la salida:
+       make qemu
+       # dentro de xv6:
+       pgtbltest
+
+  5. Pegar aquí la salida completa, e indicar arriba:
+       Fecha: <fecha de ejecución>
+       Commit: <hash del último commit>
+       Resultado: <PASS/FAIL por prueba>

@@ -1,0 +1,22 @@
+PENDIENTE DE GENERAR EN TU MÁQUINA
+==================================
+
+Este archivo debe contener la salida completa de `usertests -q` ejecutado en
+QEMU con la versión entregada, junto con fecha, commit y resultado.
+
+No se pudo generar automáticamente aquí porque el entorno de desarrollo no
+dispone del toolchain de RISC-V (riscv64-*-gcc) ni de QEMU.
+
+Para generarlo (en WSL/Ubuntu con el toolchain, igual que en el Proyecto 2):
+
+  1. Con el kernel ya compilado (ver pgtbltest.txt), dentro de xv6 ejecutar:
+       usertests -q
+
+  2. Usar la versión del curso de user/usertests.c que entrega el docente.
+
+  3. Pegar aquí la salida completa, e indicar arriba:
+       Fecha: <fecha de ejecución>
+       Commit: <hash del último commit>
+       Resultado: ALL TESTS PASSED (o el detalle de los fallos)
+
+Recuerde: un panic del kernel durante cualquiera de las pruebas cuenta como fallo.
