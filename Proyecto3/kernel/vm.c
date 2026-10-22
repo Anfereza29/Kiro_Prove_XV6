@@ -279,15 +279,12 @@ vmprint_rec(pagetable_t pagetable, int level, uint64 va)
     uint64 child_va = va | ((uint64)i << PXSHIFT(level));
     uint64 pa = PTE2PA(pte);
 
-    // Indentación exacta del enunciado: un grupo ".." por nivel de
-    // profundidad, separados por un espacio y SIN espacio al inicio.
-    //   nivel 2 -> "..", nivel 1 -> ".. ..", nivel 0 -> ".. .. ..".
+    // Indentación exacta del formato oficial del curso: un grupo " .."
+    // (espacio + dos puntos) por cada nivel de profundidad.
+    //   nivel 2 -> " ..", nivel 1 -> " .. ..", nivel 0 -> " .. .. ..".
     int depth = 2 - level; // 0 en la raíz, 1 y 2 en los niveles inferiores
-    for (int d = 0; d <= depth; d++) {
-      if (d > 0)
-        printk(" ");
-      printk("..");
-    }
+    for (int d = 0; d <= depth; d++)
+      printk(" ..");
     printk("%p: pte %p pa %p\n", (void *)child_va, (void *)pte, (void *)pa);
 
     // Si la PTE apunta a una tabla de nivel inferior (no es hoja), bajar.

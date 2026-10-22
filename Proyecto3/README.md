@@ -96,12 +96,14 @@ proceso:
 - **`ulib.c`**: se incluye `kernel/memlayout.h` y se implementa `ugetpid()`, que
   devuelve el `pid` leyendo `((struct usyscall *)USYSCALL)->pid`.
 
-- **`pgtbltest.c`** (apoyo del grupo): programa propio para probar las tres
-  partes mientras no se tiene el `pgtbltest.c` oficial del docente. **Debe
-  reemplazarse por el oficial al momento de calificar.**
+- **`pgtbltest.c`**: programa de pruebas oficial entregado por el docente
+  (Partes A, B y C). Se incluye tal cual para dejar el proyecto listo para
+  compilar y probar.
 
 > También se agrega `$U/_pgtbltest` a `UPROGS` en el `Makefile` (fuera de esta
-> carpeta, porque el `Makefile` vive en la raíz de xv6).
+> carpeta, porque el `Makefile` vive en la raíz de xv6). Para `usertests` se usa
+> la versión del curso entregada por el docente (con los dos ajustes por la
+> página USYSCALL).
 
 ---
 
