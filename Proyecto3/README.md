@@ -197,19 +197,25 @@ rompería justamente la semántica de la asignación perezosa que se quiere medi
 
 # Resultados de las pruebas
 
-La evidencia completa de ejecución en QEMU está en `pruebas/pgtbltest.txt` y
-`pruebas/usertests.txt` (con fecha, commit y resultado).
+Las pruebas se ejecutaron en QEMU con el script oficial `ejecutar_pruebas.py`.
+La evidencia completa (fecha, commit, duración y resultado) está en
+`pruebas/pgtbltest.txt` y `pruebas/usertests.txt`.
 
-- `pgtbltest`: verifica que `ugetpid()` coincide con `getpid()` en varios
-  procesos, que `USYSCALL` es de solo lectura (escribir en ella mata al proceso),
-  que `vmprint()` imprime las páginas esperadas y que `pgaccess()` detecta los
-  accesos, limpia el bit y rechaza argumentos inválidos.
-- `usertests -q`: debe pasar la suite completa, incluidas las pruebas de
-  asignación perezosa.
+- **`pgtbltest`: PASÓ — TODAS LAS PRUEBAS PASARON (11 de 11)**, y la revisión
+  automática del formato de `vmprint()` resultó **OK**. Verifica que `ugetpid()`
+  coincide con `getpid()` en procesos nuevos, hijos y tras `exec()`; que
+  `USYSCALL` es de solo lectura (escribir en ella mata al proceso); que el heap
+  no invade `USYSCALL`; que no hay fugas al crear y destruir procesos; que
+  `vmprint()` imprime las páginas esperadas con el formato correcto; y que
+  `pgaccess()` detecta accesos, limpia `PTE_A`, funciona con 64 páginas, respeta
+  las páginas perezosas y rechaza argumentos inválidos.
+- **`usertests -q`: PASÓ — ALL TESTS PASSED**, sin fugas de memoria, incluidas
+  las pruebas de asignación perezosa (`lazy_alloc`, `lazy_unmap`, `lazy_copy`,
+  `lazy_sbrk`).
 
-> Nota: en este repositorio se incluye un `user/pgtbltest.c` de apoyo creado por
-> el grupo. Para la calificación debe usarse el `pgtbltest.c` oficial del
-> docente, que sobrescribe el nuestro.
+> Los mensajes `usertrap(): unexpected scause ...` que aparecen en la salida son
+> esperados: varias pruebas provocan accesos inválidos a propósito para
+> comprobar que el kernel los rechaza. Cada bloque termina en `OK`.
 
 ---
 

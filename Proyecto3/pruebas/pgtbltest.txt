@@ -1,62 +1,51 @@
-Evidencia de ejecución de pgtbltest
-===================================
+Proyecto 3 - Tablas de páginas en acción - evidencia de pruebas
+Prueba:     pgtbltest
+Fecha:      2026-10-22 18:50:45
+Commit:     2534832
+Máquina:    LAPTOP-KES3IEIE
+Duración:   20 s
+Fin:        terminó
+Resultado:  PASÓ
+------------------------------------------------------------
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
 
-Fecha: 21 de octubre de 2026
-Base: xv6-riscv, commit 06aad25
-Programa: pgtbltest (versión de apoyo del grupo; debe reemplazarse por el
-          pgtbltest.c oficial del docente para la calificación final)
-Entorno: QEMU (riscv64), WSL/Ubuntu
+xv6 kernel is booting
 
-Resultado: TODAS LAS PRUEBAS DE APOYO PASARON (Partes A, B y C).
-
-Nota sobre el mensaje usertrap(): la línea
-  "usertrap(): unexpected scause 0xf pid=8  sepc=0xb6 stval=0x3fffffd000"
-NO es un fallo. Es la evidencia esperada del requisito A.7: el proceso hijo
-intentó ESCRIBIR en la página USYSCALL (0x3fffffd000), que está mapeada de
-solo lectura (sin PTE_W). El hardware lanzó un store page fault (scause 0xf =
-15) y el kernel terminó al hijo, que es exactamente el comportamiento correcto.
-
---------------------------------------------------------------------------
-Salida completa
---------------------------------------------------------------------------
-
-ugetpid_test starting
-ugetpid_test: OK
-usyscall_readonly_test starting
-usertrap(): unexpected scause 0xf pid=8
-            sepc=0xb6 stval=0x3fffffd000
-usyscall_readonly_test: OK (el hijo fue terminado)
-vmprint_test starting (salida de vmprint abajo)
-page table 0x0000000087f22000
-..0x0000000000000000: pte 0x0000000021fc7801 pa 0x0000000087f1e000
-.. ..0x0000000000000000: pte 0x0000000021fc7401 pa 0x0000000087f1d000
-.. .. ..0x0000000000000000: pte 0x0000000021fc7c5b pa 0x0000000087f1f000
-.. .. ..0x0000000000001000: pte 0x0000000021fc7017 pa 0x0000000087f1c000
-.. .. ..0x0000000000002000: pte 0x0000000021fc6c07 pa 0x0000000087f1b000
-.. .. ..0x0000000000003000: pte 0x0000000021fc68d7 pa 0x0000000087f1a000
-..0x0000003fc0000000: pte 0x0000000021fc8401 pa 0x0000000087f21000
-.. ..0x0000003fffe00000: pte 0x0000000021fc8001 pa 0x0000000087f20000
-.. .. ..0x0000003fffffd000: pte 0x0000000021fd4813 pa 0x0000000087f52000
-.. .. ..0x0000003fffffe000: pte 0x0000000021fd00c7 pa 0x0000000087f40000
-.. .. ..0x0000003ffffff000: pte 0x000000002000184b pa 0x0000000080006000
-vmprint_test: OK
-pgaccess_test starting
-  mask tras tocar paginas 0 y 2 = 0x5 (esperado 0x5)
-  mask en segunda consulta = 0x0 (esperado 0x0)
-pgaccess_test: OK
-pgtbltest: todas las pruebas de apoyo terminaron
-
---------------------------------------------------------------------------
-Interpretación de la tabla de páginas (vmprint)
---------------------------------------------------------------------------
-
-Zona baja (programa de usuario):
-  0x0000: texto (código)         pte ...5b -> R/X
-  0x1000: datos                  pte ...17
-  0x2000: pila/guarda            pte ...07
-  0x3000: pila (stack)           pte ...d7 -> R/W/U
-
-Zona alta (páginas del sistema):
-  0x3fffffd000: USYSCALL   pte ...13 -> V+R+U, SIN W (solo lectura) [Parte A]
-  0x3fffffe000: TRAPFRAME  pte ...c7 -> R/W sin U (solo el kernel)
-  0x3ffffff000: TRAMPOLINE pte ...4b -> R/X sin U
+hart 2 starting
+hart 1 starting
+init: starting sh
+$ pgtbltest
+pgtbltest: inicio
+prueba ugetpid_basico: OK
+prueba ugetpid_hijos: OK
+prueba ugetpid_exec: OK
+usertrap(): unexpected scause 0xf pid=17
+            sepc=0xce stval=0x3fffffd000
+prueba usyscall_solo_lectura: OK
+prueba heap_no_invade: OK
+prueba sin_fugas_usyscall: OK
+vmprint: region_perezosa=0x0000000000005000 tocada=0x0000000000008000
+vmprint: inicio
+page table 0x0000000087f23000
+ ..0x0000000000000000: pte 0x0000000021fd2001 pa 0x0000000087f48000
+ .. ..0x0000000000000000: pte 0x0000000021fd0401 pa 0x0000000087f41000
+ .. .. ..0x0000000000000000: pte 0x0000000021fc9c5b pa 0x0000000087f27000
+ .. .. ..0x0000000000001000: pte 0x0000000021fc985b pa 0x0000000087f26000
+ .. .. ..0x0000000000002000: pte 0x0000000021fc94d7 pa 0x0000000087f25000
+ .. .. ..0x0000000000003000: pte 0x0000000021fd1407 pa 0x0000000087f45000
+ .. .. ..0x0000000000004000: pte 0x0000000021fd08d7 pa 0x0000000087f42000
+ .. .. ..0x0000000000008000: pte 0x000000002073b8d7 pa 0x0000000081cee000
+ ..0x0000003fc0000000: pte 0x0000000021fca001 pa 0x0000000087f28000
+ .. ..0x0000003fffe00000: pte 0x0000000021fd1c01 pa 0x0000000087f47000
+ .. .. ..0x0000003fffffd000: pte 0x0000000021fc9013 pa 0x0000000087f24000
+ .. .. ..0x0000003fffffe000: pte 0x0000000021fca4c7 pa 0x0000000087f29000
+ .. .. ..0x0000003ffffff000: pte 0x000000002000184b pa 0x0000000080006000
+vmprint: fin
+prueba vmprint: OK
+prueba pgaccess_basico: OK
+prueba pgaccess_64: OK
+prueba pgaccess_argumentos: OK
+prueba pgaccess_perezoso: OK
+pgtbltest: TODAS LAS PRUEBAS PASARON (11 de 11)
+$ 
+Revisión del formato de vmprint(): OK
