@@ -1,0 +1,127 @@
+Proyecto 3 - Tablas de páginas en acción - evidencia de pruebas
+Prueba:     usertests -q
+Fecha:      2026-10-22 18:52:35
+Commit:     2534832
+Máquina:    LAPTOP-KES3IEIE
+Duración:   110 s
+Fin:        terminó
+Resultado:  PASÓ
+------------------------------------------------------------
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+xv6 kernel is booting
+
+hart 1 starting
+hart 2 starting
+init: starting sh
+$ usertests -q
+usertests starting
+test copyin: OK
+test copyout: OK
+test copyinstr1: OK
+test copyinstr2: OK
+test copyinstr3: OK
+test rwsbrk: OK
+test truncate1: OK
+test truncate2: OK
+test truncate3: OK
+test openiput: OK
+test exitiput: OK
+test iput: OK
+test opentest: OK
+test writetest: OK
+test writebig: OK
+test createtest: OK
+test dirtest: OK
+test exectest: OK
+test pipe1: OK
+test killstatus: OK
+test killzero: OK
+test preempt: kill... wait... OK
+test exitwait: OK
+test reparent: OK
+test twochildren: OK
+test forkfork: OK
+test forkforkfork: OK
+test reparent2: OK
+test mem: OK
+test sharedfd: OK
+test fourfiles: OK
+test createdelete: OK
+test unlinkread: OK
+test linktest: OK
+test concreate: OK
+test linkunlink: OK
+test subdir: OK
+test bigwrite: OK
+test bigfile: OK
+test fourteen: OK
+test rmdot: OK
+test dirfile: OK
+test iref: OK
+test forktest: OK
+test sbrkbasic: OK
+test sbrkmuch: OK
+test kernmem: usertrap(): unexpected scause 0xd pid=6476
+            sepc=0x1b44 stval=0x80000000
+[... múltiples usertrap() esperados: el kernel rechaza accesos a memoria del kernel ...]
+            sepc=0x1b44 stval=0x801dc130
+OK
+test MAXVAplus: usertrap(): unexpected scause 0xf pid=6517
+            sepc=0x1bda stval=0x4000000000
+[... múltiples usertrap() esperados: el kernel rechaza direcciones por encima de MAXVA ...]
+            sepc=0x1bda stval=0x8000000000000000
+OK
+test sbrkfail: OK
+test sbrkarg: OK
+test validatetest: OK
+test bsstest: OK
+test bigargtest: OK
+test argptest: OK
+test stacktest: usertrap(): unexpected scause 0xd pid=6562
+            sepc=0x1c2e stval=0x10e80
+OK
+test nowrite: usertrap(): unexpected scause 0xf pid=6564
+            sepc=0x1cd8 stval=0x0
+usertrap(): unexpected scause 0xf pid=6565
+            sepc=0x1cd8 stval=0x80000000
+usertrap(): unexpected scause 0xf pid=6566
+            sepc=0x1cd8 stval=0x3fffffe000
+usertrap(): unexpected scause 0xf pid=6567
+            sepc=0x1cd8 stval=0x3ffffff000
+usertrap(): unexpected scause 0xf pid=6568
+            sepc=0x1cd8 stval=0x4000000000
+usertrap(): unexpected scause 0xf pid=6569
+            sepc=0x1cd8 stval=0xffffffffffffffff
+OK
+test pgbug: OK
+test sbrkbugs: usertrap(): unexpected scause 0xc pid=6572
+            sepc=0x5822 stval=0x5822
+usertrap(): unexpected scause 0xc pid=6573
+            sepc=0x5822 stval=0x5822
+usertrap(): unexpected scause 0xd pid=6574
+            sepc=0x5754 stval=0x11e98
+OK
+test sbrklast: OK
+test sbrk8000: OK
+test badarg: OK
+test lazy_alloc: OK
+test lazy_unmap: usertrap(): unexpected scause 0xf pid=6580
+            sepc=0x4a3e stval=0x13000
+[... múltiples usertrap() esperados: lazy_unmap verifica que la memoria liberada ya no es accesible ...]
+            sepc=0x4a3e stval=0x3f013000
+OK
+test lazy_copy: OK
+test lazy_copyinstr: OK
+test lazy_sbrk: OK
+test partial_write: OK
+test unlinkcwd: OK
+ALL TESTS PASSED
+$ 
+
+------------------------------------------------------------
+NOTA: Los bloques largos de mensajes "usertrap(): unexpected scause ..."
+se condensaron con "[...]" para legibilidad. Son el comportamiento ESPERADO:
+varias pruebas (kernmem, MAXVAplus, nowrite, lazy_unmap, sbrkbugs) provocan
+accesos inválidos a propósito para comprobar que el kernel los rechaza; cada
+bloque termina en OK. El resultado global es ALL TESTS PASSED.
